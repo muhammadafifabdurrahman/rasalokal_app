@@ -1,1 +1,0 @@
-# rasalokal_app
