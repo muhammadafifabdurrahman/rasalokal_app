@@ -1,6 +1,43 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getMenus} from "../../../_services/menus";
+import { getCategories } from "../../../_services/categories";
 
 export default function AdminMenus() {
+  const  [menus, setMenus] = useState([]);
+    const [categories, setCategories] = useState([]);
+
+    const  [openDropdownId, setOpenDropdownId] = useState([]);
+
+    useEffect(()=> {
+        const fetchData = async () => {
+            const [menusData, categoriesData] = await Promise.all([
+                getMenus(),
+                getCategories(),
+            ])
+            setMenus(menusData)
+            setCategories(categoriesData)
+        }
+        fetchData()
+    }, [])
+
+    const getCategoriesName = (id) => {
+        const category = categories.find((category) => category.id === id)
+        return category ? category.name : "Unknown Category"
+    }
+
+    const toggleOpenDropdown = (id) => {
+        setOpenDropdownId(openDropdownId === id ? null : id)
+    }
+
+    // const handleDelete = async (id) => {
+    //     const confirmDelete = window.confirm("Are you sure to delete this book?");
+    //     if(confirmDelete){
+    //         await deleteBook(id);
+    //         setBooks(books.filter((book) => book.id !== id));
+    //     }
+    // }
+
     return (
     <>
       <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
@@ -82,34 +119,33 @@ export default function AdminMenus() {
                       Photo
                     </th>
                     <th scope="col" className="px-4 py-3">
-                      Categories
+                      Category
                     </th>
-                    <th scope="col" className="px-4 py-3">
+                    <th scope="col" className="px-4 py-3 text-center">
                       Action
                     </th>
                   </tr>
                 </thead>
                 <tbody>
+                  { menus.length > 0 ?
+                    menus.map((menu) => (
                   <tr className="border-b dark:border-gray-700">
                     <th
                       scope="row"
                       className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {/* {author.id} */} 1
+                      {menu.id} 
                     </th> 
-                    <th
-                      scope="row"
-                      className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      {/* {author.name} */}sndnbsd
-                    </th>
-                    <td className="px-4 py-3">asdj</td>
-                    <td className="px-4 py-3">msn</td>
-                    <td className="px-4 py-3">asdj</td>
-                    <td className="px-4 py-3">msn</td>
-                    <td className="px-4 py-3">msn</td>
-                    <td className="px-4 py-3 flex items-center justify-end relative">
+                    <td className="px-4 py-3">{menu.name}</td>
+                    <td className="px-4 py-3">{menu.description}</td>
+                    <td className="px-4 py-3">{menu.price}</td>
+                    <td className="px-4 py-3">{menu.stock}</td>
+                    <td className="px-4 py-3">{menu.photo}</td>
+                    <td className="px-4 py-3">{ getCategoriesName(menu.category_id)}</td>
+                    <td className="px-4 py-3 flex items-center justify-center relative">
                       <button
+                        id={`dropdown-button-${menu.id}`}
+                        onClick={() => toggleOpenDropdown(menu.id)}
                         className="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                         type="button"
                       >
@@ -124,7 +160,7 @@ export default function AdminMenus() {
                         </svg>
                       </button>
 
-                    {(
+                    {openDropdownId === menu.id && (
                       <div
                         id="apple-imac-27-dropdown"
                         className="absolute right-0 mt-2 z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
@@ -132,11 +168,11 @@ export default function AdminMenus() {
                       >
                         <ul
                           className="py-1 text-sm text-gray-700 dark:text-gray-200"
-                          aria-labelledby={`dropdown-button`}
+                          aria-labelledby={`dropdown-button-${menu.id}`}
                         >
                           <li>
                             <Link
-                              to={`/admin/books/edit/`}
+                              to={`/admin/books/edit/${menu.id}`}
                               className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                             >
                               Edit
@@ -144,12 +180,16 @@ export default function AdminMenus() {
                           </li>
                         </ul>
                         <div className="py-1">
-                            <button  className="block py-2 px-4 text-sm tet-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</button>
+                            <button  className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</button>
                         </div>
                       </div>
                     )}
                     </td>
                   </tr>
+                  )) : (
+                        <p>Data tidak ditemukan</p>
+                    )
+                } 
                 </tbody>
               </table>
             </div>
@@ -158,14 +198,7 @@ export default function AdminMenus() {
               aria-label="Table navigation"
             >
               <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                Showing 
-                 <span className="font-semibold text-gray-900 dark:text-white">
-                  1-10 
-                </span>
-                 of
-                <span className="font-semibold text-gray-900 dark:text-white">
-                  1000
-                </span>
+                Showing <span className="font-semibold text-gray-900 dark:text-white"> 1 - 10 </span> of <span className="font-semibold text-gray-900 dark:text-white"> 1000 </span>
               </span>
               <ul className="inline-flex items-stretch -space-x-px">
                 <li>

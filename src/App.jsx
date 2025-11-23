@@ -6,6 +6,7 @@ import AdminUsers from './pages/admin/users';
 import AdminCategories from './pages/admin/categories';
 import AdminMenus from './pages/admin/menus';
 import AdminTransactions from './pages/admin/transactions';
+import CategoriesCreate from './pages/admin/categories/create';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
             </Route>
             <Route path='categories'>
               <Route index element={<AdminCategories />}/>
+              <Route path='create' element={<CategoriesCreate />}/>
             </Route>
             <Route path='menus'>
               <Route index element={<AdminMenus />}/>

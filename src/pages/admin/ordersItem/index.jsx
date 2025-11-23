@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getUsers} from "../../../_services/auth";
 
-export default function AdminUsers() {
+export default function AdminOrdersItem() {
     const [users, setUsers] = useState([]);
 
     const  [openDropdownId, setOpenDropdownId] = useState([]);
@@ -93,15 +93,21 @@ export default function AdminUsers() {
                       Id
                     </th>
                     <th scope="col" className="px-4 py-3">
-                      Name
+                      Order Id
                     </th>
                     <th scope="col" className="px-4 py-3">
-                      Email
+                     Menu Id
                     </th>
                     <th scope="col" className="px-4 py-3">
-                      Role
+                      Quantity
                     </th>
                     <th scope="col" className="px-4 py-3">
+                      Price
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      Total
+                    </th>
+                    <th scope="col" className="px-4 py-3 text-center">
                       Action
                     </th>
                   </tr>

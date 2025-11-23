@@ -1,6 +1,25 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getCategories } from "../../../_services/categories";
 
 export default function AdminCategories() {
+
+    const [categories, setCategories] = useState([]);
+
+    const  [openDropdownId, setOpenDropdownId] = useState([]);
+
+    useEffect(()=> {
+        const fetchData = async () => {
+            const categoriesData = await getCategories();
+            setCategories(categoriesData);
+        }
+        fetchData()
+    }, [])
+
+    const toggleOpenDropdown = (id) => {
+        setOpenDropdownId(openDropdownId === id ? null : id)
+    }
+
     return (
     <>
       <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
@@ -37,9 +56,9 @@ export default function AdminCategories() {
                   </div>
                 </form>
               </div>
-              <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+              <div className="text-white w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0 bg-blue-600">
                 <Link
-                  to={'/admin/authors/create'}
+                  to={'/admin/categories/create'}
                   className="flex items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800"
                 >
                   <svg
@@ -55,7 +74,7 @@ export default function AdminCategories() {
                       d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
                     />
                   </svg>
-                  Add users
+                  Add Categori
                 </Link>
               </div>
             </div>
@@ -72,29 +91,32 @@ export default function AdminCategories() {
                     <th scope="col" className="px-4 py-3">
                       Description
                     </th>
-                    <th scope="col" className="px-4 py-3">
+                    <th scope="col" className="px-4 py-3 text-center">
                       Action
                     </th>
                   </tr>
                 </thead>
                 <tbody>
+                   { categories.length > 0 ?
+                    categories.map((categori) => (
                   <tr className="border-b dark:border-gray-700">
                     <th
                       scope="row"
                       className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {/* {author.id} */} 1
+                      {categori.id} 
                     </th> 
                     <th
                       scope="row"
                       className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {/* {author.name} */}sndnbsd
+                      {categori.name}
                     </th>
-                    <td className="px-4 py-3">asdj</td>
-                    <td className="px-4 py-3">msn</td>
-                    <td className="px-4 py-3 flex items-center justify-end relative">
+                    <td className="px-4 py-3">{categori.description}</td>
+                    <td className="px-4 py-3 flex items-center justify-center relative">
                       <button
+                        id={`dropdown-button-${categori.id}`}
+                        onClick={() => toggleOpenDropdown(categori.id)}
                         className="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                         type="button"
                       >
@@ -109,7 +131,7 @@ export default function AdminCategories() {
                         </svg>
                       </button>
 
-                    {(
+                    {openDropdownId === categori.id && (
                       <div
                         id="apple-imac-27-dropdown"
                         className="absolute right-0 mt-2 z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
@@ -117,11 +139,11 @@ export default function AdminCategories() {
                       >
                         <ul
                           className="py-1 text-sm text-gray-700 dark:text-gray-200"
-                          aria-labelledby={`dropdown-button`}
+                          aria-labelledby={`dropdown-button-${categori.id}`}
                         >
                           <li>
                             <Link
-                              to={`/admin/books/edit/`}
+                              to={`/admin/users/edit/${categori.id}`}
                               className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                             >
                               Edit
@@ -129,12 +151,16 @@ export default function AdminCategories() {
                           </li>
                         </ul>
                         <div className="py-1">
-                            <button  className="block py-2 px-4 text-sm tet-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</button>
+                            <button  className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</button>
                         </div>
                       </div>
                     )}
                     </td>
                   </tr>
+                  )) : (
+                        <p>Data tidak ditemukan</p>
+                    )
+                } 
                 </tbody>
               </table>
             </div>
@@ -143,14 +169,7 @@ export default function AdminCategories() {
               aria-label="Table navigation"
             >
               <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                Showing 
-                 <span className="font-semibold text-gray-900 dark:text-white">
-                  1-10 
-                </span>
-                 of
-                <span className="font-semibold text-gray-900 dark:text-white">
-                  1000
-                </span>
+                Showing <span className="font-semibold text-gray-900 dark:text-white"> 1 - 10 </span> of <span className="font-semibold text-gray-900 dark:text-white"> 1000 </span>
               </span>
               <ul className="inline-flex items-stretch -space-x-px">
                 <li>

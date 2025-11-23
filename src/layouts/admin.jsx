@@ -2,7 +2,7 @@ import { Link, Outlet } from "react-router-dom";
 
 export default function AdminLayout() {
   return (
-    <div className="min-h-screen flex bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen w-full">
       {/* NAVBAR FIXED */}
       <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 fixed top-0 left-0 right-0 z-50 w-full px-4 py-2.5">
         <div className="flex items-center justify-between mx-auto max-w-screen-xl">
@@ -133,6 +133,28 @@ export default function AdminLayout() {
                 </span>
               </Link>
             </li>
+
+            <li>
+              <Link
+                to="/admin/ordersItem"
+                className="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <span className="ml-2 text-gray-900 dark:text-white">
+                  Order Item
+                </span>
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                to="/admin/orders"
+                className="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <span className="ml-2 text-gray-900 dark:text-white">
+                  Orders
+                </span>
+              </Link>
+            </li>
           </ul>
 
           <ul className="pt-6 mt-6 space-y-2 border-t border-gray-200 dark:border-gray-700">
@@ -162,8 +184,8 @@ export default function AdminLayout() {
       </aside>
 
       {/* MAIN CONTENT */}
-      <main className="flex-1 pt-20 md:ml-64">
-        <div className="min-h-screen border-2 border-dashed rounded-lg dark:border-gray-700 mr-4 p-4">
+      <main className="pt-20 md:ml-100 w-full">
+        <div className="min-h-screen border-2 border-dashed rounded-lg  mr-4 p-4 w-full">
           <Outlet />
         </div>
       </main>
