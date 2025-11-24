@@ -7,6 +7,7 @@ import AdminCategories from './pages/admin/categories';
 import AdminMenus from './pages/admin/menus';
 import AdminTransactions from './pages/admin/transactions';
 import CategoriesCreate from './pages/admin/categories/create';
+import AdminOrders from './pages/admin/orders';
 
 
 function App() {
@@ -25,6 +26,9 @@ function App() {
             </Route>
             <Route path='menus'>
               <Route index element={<AdminMenus />}/>
+            </Route>
+            <Route path='orders'>
+              <Route index element={<AdminOrders />}/>
             </Route>
             <Route path='transactions'>
               <Route index element={<AdminTransactions />}/>
