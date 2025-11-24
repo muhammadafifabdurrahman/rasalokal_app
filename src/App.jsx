@@ -5,8 +5,9 @@ import Dashboard from './pages/admin';
 import AdminUsers from './pages/admin/users';
 import AdminCategories from './pages/admin/categories';
 import AdminMenus from './pages/admin/menus';
-import AdminTransactions from './pages/admin/transactions';
+import AdminPayments from './pages/admin/payments';
 import CategoriesCreate from './pages/admin/categories/create';
+import AdminOrders from './pages/admin/orders';
 
 
 function App() {
@@ -26,8 +27,11 @@ function App() {
             <Route path='menus'>
               <Route index element={<AdminMenus />}/>
             </Route>
-            <Route path='transactions'>
-              <Route index element={<AdminTransactions />}/>
+            <Route path='orders'>
+              <Route index element={<AdminOrders />}/>
+            </Route>
+            <Route path='payments'>
+              <Route index element={<AdminPayments />}/>
             </Route>
           </Route>
         </Routes>

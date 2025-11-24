@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getCategories } from "../../../_services/categories";
+import { getOrders } from "../../../_services/orders";
 
-export default function AdminCategories() {
+export default function AdminOrders() {
 
-    const [categories, setCategories] = useState([]);
+    const [orders, setOrders] = useState([]);
 
-    const  [openDropdownId, setOpenDropdownId] = useState([]);
+    const  [openDropdownId, setOpenDropdownId] = useState(null);
 
     useEffect(()=> {
         const fetchData = async () => {
-            const categoriesData = await getCategories();
-            setCategories(categoriesData);
+            const ordersData = await getOrders();
+            setOrders(ordersData);
         }
         fetchData()
     }, [])
@@ -86,10 +86,25 @@ export default function AdminCategories() {
                       Id
                     </th>
                     <th scope="col" className="px-4 py-3">
-                      Name
+                      Order Number
                     </th>
                     <th scope="col" className="px-4 py-3">
-                      Description
+                      Customer Name
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      Table Number
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      Order Type
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      Total Amount
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      Status
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      Note
                     </th>
                     <th scope="col" className="px-4 py-3 text-center">
                       Action
@@ -97,26 +112,31 @@ export default function AdminCategories() {
                   </tr>
                 </thead>
                 <tbody>
-                   { categories.length > 0 ?
-                    categories.map((categori) => (
+                   { orders.length > 0 ?
+                    orders.map((order) => (
                   <tr className="border-b dark:border-gray-700">
                     <th
                       scope="row"
                       className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {categori.id} 
+                      {order.id} 
                     </th> 
                     <th
                       scope="row"
                       className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {categori.name}
+                      {order.order_number}
                     </th>
-                    <td className="px-4 py-3">{categori.description}</td>
+                    <td className="px-4 py-3">{order.customer_name}</td>
+                    <td className="px-4 py-3">{order.table_number}</td>
+                    <td className="px-4 py-3">{order.order_type}</td>
+                    <td className="px-4 py-3">{order.total_amount}</td>
+                    <td className="px-4 py-3">{order.status}</td>
+                    <td className="px-4 py-3">{order.note}</td>
                     <td className="px-4 py-3 flex items-center justify-center relative">
                       <button
-                        id={`dropdown-button-${categori.id}`}
-                        onClick={() => toggleOpenDropdown(categori.id)}
+                        id={`dropdown-button-${order.id}`}
+                        onClick={() => toggleOpenDropdown(order.id)}
                         className="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                         type="button"
                       >
@@ -131,7 +151,7 @@ export default function AdminCategories() {
                         </svg>
                       </button>
 
-                    {openDropdownId === categori.id && (
+                    {openDropdownId === order.id && (
                       <div
                         id="apple-imac-27-dropdown"
                         className="absolute right-0 mt-2 z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
@@ -139,11 +159,11 @@ export default function AdminCategories() {
                       >
                         <ul
                           className="py-1 text-sm text-gray-700 dark:text-gray-200"
-                          aria-labelledby={`dropdown-button-${categori.id}`}
+                          aria-labelledby={`dropdown-button-${order.id}`}
                         >
                           <li>
                             <Link
-                              to={`/admin/users/edit/${categori.id}`}
+                              to={`/admin/orders/edit/${order.id}`}
                               className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                             >
                               Edit

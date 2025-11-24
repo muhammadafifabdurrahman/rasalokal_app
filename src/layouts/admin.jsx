@@ -160,11 +160,11 @@ export default function AdminLayout() {
           <ul className="pt-6 mt-6 space-y-2 border-t border-gray-200 dark:border-gray-700">
             <li>
               <Link
-                to="/admin/transactions"
+                to="/admin/payments"
                 className="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <span className="ml-2 text-gray-900 dark:text-white">
-                  Transactions
+                  Payments
                 </span>
               </Link>
             </li>

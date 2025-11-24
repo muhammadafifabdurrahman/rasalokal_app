@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getUsers} from "../../../_services/auth";
+import { getUsers } from "../../../_services/auth";
 
 export default function AdminOrdersItem() {
     const [users, setUsers] = useState([]);

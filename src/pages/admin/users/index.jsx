@@ -114,16 +114,16 @@ export default function AdminUsers() {
                       scope="row"
                       className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {/* {author.id} */} 1
+                      {user.id}
                     </th> 
                     <th
                       scope="row"
                       className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {/* {author.name} */}sndnbsd
+                      {user.name}
                     </th>
-                    <td className="px-4 py-3">asdj</td>
-                    <td className="px-4 py-3">msn</td>
+                    <td className="px-4 py-3">{user.email}</td>
+                    <td className="px-4 py-3">{user.role}</td>
                     <td className="px-4 py-3 flex items-center justify-center relative">
                       <button
                         id={`dropdown-button-${user.id}`}

@@ -1,6 +1,44 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getPayments } from "../../../_services/payments";
+import { getOrders } from "../../../_services/orders";
+import { getUsers } from "../../../_services/auth";
 
-export default function AdminTransactions() {
+export default function AdminPayments() {
+  const [payments, setPayments] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [users, setUsers] = useState([]);
+
+  const  [openDropdownId, setOpenDropdownId] = useState([]);
+
+  useEffect(()=> {
+      const fetchData = async () => {
+          const [paymentsData, ordersData, usersData] = await Promise.all([
+              getPayments(),
+              getOrders(),
+              getUsers(),
+          ])
+          setPayments(paymentsData)
+          setOrders(ordersData)
+          setUsers(usersData)
+      }
+      fetchData()
+  }, [])
+
+  const getOrdersId = (id) => {
+      const order = orders.find((order) => order.id === id)
+      return order ? order.name : "Unknown Order"
+  }
+
+  const getUsersId = (id) => {
+      const user = users.find((user) => user.id === id)
+      return user ? user.name : "Unknown User"
+  }
+
+  const toggleOpenDropdown = (id) => {
+      setOpenDropdownId(openDropdownId === id ? null : id)
+  }
+
     return (
     <>
       <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
@@ -67,19 +105,28 @@ export default function AdminTransactions() {
                       Id
                     </th>
                     <th scope="col" className="px-4 py-3">
-                      Customer Name
+                      Order Id
                     </th>
                     <th scope="col" className="px-4 py-3">
-                      Customer Phone
+                      User Id
                     </th>
                     <th scope="col" className="px-4 py-3">
-                      Table Number
+                      Kode Pembayaran
                     </th>
                     <th scope="col" className="px-4 py-3">
-                      Total_price
+                      Payment Method
                     </th>
                     <th scope="col" className="px-4 py-3">
-                      Payment Status
+                      Total Amount
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      Amount Paid
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      Change Amount
+                    </th>
+                    <th scope="col" className="px-4 py-3">
+                      Status
                     </th>
                     <th scope="col" className="px-4 py-3">
                       Action
@@ -87,65 +134,81 @@ export default function AdminTransactions() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-b dark:border-gray-700">
-                    <th
-                      scope="row"
-                      className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      {/* {author.id} */} 1
-                    </th> 
-                    <th
-                      scope="row"
-                      className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      {/* {author.name} */}sndnbsd
-                    </th>
-                    <td className="px-4 py-3">asdj</td>
-                    <td className="px-4 py-3">msn</td>
-                    <td className="px-4 py-3">asdj</td>
-                    <td className="px-4 py-3">msn</td>
-                    <td className="px-4 py-3 flex items-center justify-end relative">
-                      <button
-                        className="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
-                        type="button"
+                  { payments.length > 0 ?
+                    payments.map((payment) => (
+                    <tr className="border-b dark:border-gray-700">
+                      <th
+                        scope="row"
+                        className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                       >
-                        <svg
-                          className="w-5 h-5"
-                          aria-hidden="true"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
+                        {payment.id}
+                      </th> 
+                      <th
+                        scope="row"
+                        className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      >
+                        {/* { getOrdersId(payment.order_id) } */}
+                        { payment.order_id }
+                      </th>
+                      <th
+                        scope="row"
+                        className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      >
+                        {/* { getUsersId(payment.user_id) } */}
+                        { payment.user_id }
+                      </th>
+                      <td className="px-4 py-3">{payment.kode_pembayaran}</td>
+                      <td className="px-4 py-3">{payment.payment_method}</td>
+                      <td className="px-4 py-3">{payment.total_amount}</td>
+                      <td className="px-4 py-3">{payment.amount_paid}</td>
+                      <td className="px-4 py-3">{payment.change_amount}</td>
+                      <td className="px-4 py-3">{payment.status}</td>
+                      <td className="px-4 py-3 flex items-center justify-end relative">
+                        <button
+                          className="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                          type="button"
                         >
-                          <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-                        </svg>
-                      </button>
+                          <svg
+                            className="w-5 h-5"
+                            aria-hidden="true"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                          </svg>
+                        </button>
 
-                    {(
-                      <div
-                        id="apple-imac-27-dropdown"
-                        className="absolute right-0 mt-2 z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
-                        style={{ top: "100%" , right: "0" }}
-                      >
-                        <ul
-                          className="py-1 text-sm text-gray-700 dark:text-gray-200"
-                          aria-labelledby={`dropdown-button`}
+                      {(
+                        <div
+                          id="apple-imac-27-dropdown"
+                          className="absolute right-0 mt-2 z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+                          style={{ top: "100%" , right: "0" }}
                         >
-                          <li>
-                            <Link
-                              to={`/admin/books/edit/`}
-                              className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                            >
-                              Edit
-                            </Link>
-                          </li>
-                        </ul>
-                        <div className="py-1">
-                            <button  className="block py-2 px-4 text-sm tet-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</button>
+                          <ul
+                            className="py-1 text-sm text-gray-700 dark:text-gray-200"
+                            aria-labelledby={`dropdown-button`}
+                          >
+                            <li>
+                              <Link
+                                to={`/admin/books/edit/`}
+                                className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                              >
+                                Edit
+                              </Link>
+                            </li>
+                          </ul>
+                          <div className="py-1">
+                              <button  className="block py-2 px-4 text-sm tet-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</button>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                    </td>
-                  </tr>
+                      )}
+                      </td>
+                    </tr>
+                  )) : (
+                        <p>Data tidak ditemukan</p>
+                    )
+                }
                 </tbody>
               </table>
             </div>
