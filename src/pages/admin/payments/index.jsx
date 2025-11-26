@@ -23,7 +23,7 @@ export default function AdminPayments() {
 
   const getOrdersId = (id) => {
     const order = orders.find((order) => order.id === id);
-    return order ? order.name : "Unknown Order";
+    return order ? order.order_number : "Unknown Order";
   };
 
   const getUsersName = (id) => {
@@ -69,8 +69,8 @@ export default function AdminPayments() {
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                   <th className="px-4 py-3">Id</th>
-                  <th className="px-4 py-3">Order Id</th>
-                  <th className="px-4 py-3">User Id</th>
+                  <th className="px-4 py-3">Order</th>
+                  <th className="px-4 py-3">User</th>
                   <th className="px-4 py-3">Kode Pembayaran</th>
                   <th className="px-4 py-3">Payment Method</th>
                   <th className="px-4 py-3">Total Amount</th>
@@ -86,7 +86,7 @@ export default function AdminPayments() {
                   payments.map((payment) => (
                     <tr key={payment.id} className="border-b dark:border-gray-700">
                       <td className="px-4 py-3">{payment.id}</td>
-                      <td className="px-4 py-3">{payment.order_id}</td>
+                      <td className="px-4 py-3">{getOrdersId(payment.order_id)}</td>
                       <td className="px-4 py-3">{getUsersName(payment.user_id)}</td> {/*Menampilkan nama user berdasarkan user_id*/}
                       <td className="px-4 py-3">{payment.kode_pembayaran}</td>
                       <td className="px-4 py-3">{payment.payment_method}</td>

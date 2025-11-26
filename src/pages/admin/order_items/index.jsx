@@ -1,19 +1,40 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getUsers } from "../../../_services/auth";
+import { getOrdersItems } from "../../../_services/order_items";
+import { getMenus } from "../../../_services/menus";
+import { getOrders } from "../../../_services/orders";
 
-export default function AdminOrdersItem() {
-    const [users, setUsers] = useState([]);
-
+export default function AdminOrdersItems() {
+    const [ordersItems, setOrdersItems] = useState([]);
+    const [orders, setOrders] = useState([]);
+    const [menus, setMenus] = useState([]);
     const  [openDropdownId, setOpenDropdownId] = useState([]);
 
     useEffect(()=> {
         const fetchData = async () => {
-            const usersData = await getUsers();
-            setUsers(usersData);
+            // const ordersItemsData = await getOrdersItems();
+            // setOrdersItems(ordersItemsData);
+            const [ordersItemsData,menusData, ordersData] = await Promise.all([
+                getOrdersItems(),
+                getMenus(),
+                getOrders(),
+            ])
+            setOrdersItems(ordersItemsData)
+            setMenus(menusData)
+            setOrders(ordersData)
         }
         fetchData()
     }, [])
+
+    const getOrdersId = (id) => {
+      const order = orders.find((order) => order.id === id);
+      return order ? order.id : "Unknown Order";
+    };
+
+    const getMenusId = (id) => {
+      const menu = menus.find((menu) => menu.id === id);
+      return menu ? menu.id : "Unknown Menu";
+    };
 
     const toggleOpenDropdown = (id) => {
         setOpenDropdownId(openDropdownId === id ? null : id)
@@ -96,7 +117,7 @@ export default function AdminOrdersItem() {
                       Order Id
                     </th>
                     <th scope="col" className="px-4 py-3">
-                     Menu Id
+                      Menu Id
                     </th>
                     <th scope="col" className="px-4 py-3">
                       Quantity
@@ -113,27 +134,29 @@ export default function AdminOrdersItem() {
                   </tr>
                 </thead>
                 <tbody>
-                  { users.length > 0 ?
-                    users.map((user) => (
+                  { ordersItems.length > 0 ?
+                    ordersItems.map((order_item) => (
                   <tr className="border-b dark:border-gray-700">
                     <th
                       scope="row"
                       className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {/* {author.id} */} 1
+                      {order_item.id} 
                     </th> 
                     <th
                       scope="row"
                       className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {/* {author.name} */}sndnbsd
+                      {getOrdersId(order_item.order_id)}
                     </th>
-                    <td className="px-4 py-3">asdj</td>
-                    <td className="px-4 py-3">msn</td>
+                    <td className="px-4 py-3">{getMenusId(order_item.menu_id)}</td>
+                    <td className="px-4 py-3">{order_item.quantity}</td>
+                    <td className="px-4 py-3">{order_item.price}</td>
+                    <td className="px-4 py-3">{order_item.subtotal}</td>
                     <td className="px-4 py-3 flex items-center justify-center relative">
                       <button
-                        id={`dropdown-button-${user.id}`}
-                        onClick={() => toggleOpenDropdown(user.id)}
+                        id={`dropdown-button-${order_item.id}`}
+                        onClick={() => toggleOpenDropdown(order_item.id)}
                         className="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                         type="button"
                       >
@@ -148,7 +171,7 @@ export default function AdminOrdersItem() {
                         </svg>
                       </button>
 
-                    {openDropdownId === user.id && (
+                    {openDropdownId === order_item.id && (
                       <div
                         id="apple-imac-27-dropdown"
                         className="absolute right-0 mt-2 z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
@@ -156,11 +179,11 @@ export default function AdminOrdersItem() {
                       >
                         <ul
                           className="py-1 text-sm text-gray-700 dark:text-gray-200"
-                          aria-labelledby={`dropdown-button-${user.id}`}
+                          aria-labelledby={`dropdown-button-${order_item.id}`}
                         >
                           <li>
                             <Link
-                              to={`/admin/users/edit/${user.id}`}
+                              to={`/admin/order_items/edit/${order_item.id}`}
                               className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                             >
                               Edit
