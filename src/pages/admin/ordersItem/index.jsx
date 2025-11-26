@@ -1,19 +1,27 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getUsers } from "../../../_services/auth";
+import { getMenus } from "../../../_services/menus";
+import { getOrders } from "../../../_services/orders";
+// import { getUsers } from "../../../_services/auth";
 
 export default function AdminOrdersItem() {
-    const [users, setUsers] = useState([]);
+    // const [users, setUsers] = useState([]);
+    const [menus, setMenus] = useState([]);
+    const [orders, setOrders] = useState([]);
 
     const  [openDropdownId, setOpenDropdownId] = useState([]);
 
     useEffect(()=> {
-        const fetchData = async () => {
-            const usersData = await getUsers();
-            setUsers(usersData);
-        }
-        fetchData()
-    }, [])
+            const fetchData = async () => {
+                const [menusData, ordersData] = await Promise.all([
+                    getMenus(),
+                    getOrders(),
+                ])
+                setMenus(menusData)
+                setOrders(ordersData)
+            }
+            fetchData()
+        }, [])
 
     const toggleOpenDropdown = (id) => {
         setOpenDropdownId(openDropdownId === id ? null : id)
@@ -101,7 +109,7 @@ export default function AdminOrdersItem() {
                     <th scope="col" className="px-4 py-3">
                       Quantity
                     </th>
-                    <th scope="col" className="px-4 py-3">
+                    <th scope="col" className="px-4 py-3"> 
                       Price
                     </th>
                     <th scope="col" className="px-4 py-3">

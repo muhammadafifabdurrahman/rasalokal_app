@@ -4,6 +4,11 @@ export const getPayments = async () => {
       const {data} = await API.get("/payments");
       return data.data
 }
+export const getPaymentMethods = async () => {
+      const {data} = await API.get("/paymentMethods");
+      return data.data
+}
+
 
 export const createPayments = async (data) => {
       try {

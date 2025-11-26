@@ -6,14 +6,19 @@ export const getMenus = async () => {
 }
 
 export const createMenu = async (data) => {
-      try {
-            const response = await API.post("/menus", data)
-            return response.data
-      } catch (error){
-            console.log(error);
-            throw error
-      }
-}
+  try {
+    const response = await API.post("/menus", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error.response?.data || error);
+    throw error;
+  }
+};
+
 
 export const showMenus = async (id) => {
       try {

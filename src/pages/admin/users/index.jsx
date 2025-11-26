@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getUsers} from "../../../_services/auth";
+import { deleteUsers, getUsers} from "../../../_services/auth";
 
 export default function AdminUsers() {
     const [users, setUsers] = useState([]);
@@ -19,13 +19,13 @@ export default function AdminUsers() {
         setOpenDropdownId(openDropdownId === id ? null : id)
     }
 
-    // const handleDelete = async (id) => {
-    //     const confirmDelete = window.confirm("Are you sure to delete this User?");
-    //     if(confirmDelete){
-    //         await deleteUsers(id);
-    //         setUsers(users.filter((user) => user.id !== id));
-    //     }
-    // }
+    const handleDelete = async (id) => {
+        const confirmDelete = window.confirm("Are you sure to delete this User?");
+        if(confirmDelete){
+            await deleteUsers(id);
+            setUsers(users.filter((user) => user.id !== id));
+        }
+    }
 
     return (
     <>
@@ -162,7 +162,7 @@ export default function AdminUsers() {
                           </li>
                         </ul>
                         <div className="py-1">
-                            <button className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</button>
+                            <button onClick={ ()=> handleDelete(user.id)}  className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</button>
                         </div>
                       </div>
                     )}

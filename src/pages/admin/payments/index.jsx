@@ -7,33 +7,42 @@ import { getUsers } from "../../../_services/auth";
 export default function AdminPayments() {
   const [payments, setPayments] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [users, setUsers] = useState([]);
+  // const [users, setUsers] = useState([]);
+  // const [ordersName, setOrdersName] = useState("");
 
   const [openDropdownId, setOpenDropdownId] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const [paymentsData, ordersData, usersData] = await Promise.all([getPayments(), getOrders(), getUsers()]);
+      const [paymentsData, ordersData] = await Promise.all([getPayments(), getOrders(), getUsers()]);
       setPayments(paymentsData);
       setOrders(ordersData);
-      setUsers(usersData);
+      // setUsers(usersData);
     };
     fetchData();
   }, []);
 
-  const getOrdersId = (id) => {
+  // const getOrdersId = (id) => {
+  //   const order = orders.find((order) => order.id === id);
+  //   return order ? order.name : "Unknown Order";
+  // };
+
+  const getOrdersName = (id) => {
     const order = orders.find((order) => order.id === id);
-    return order ? order.name : "Unknown Order";
+    return order ? order.customer_name : "Unknown Order";
+  };
+  const getOrdersNumber = (id) => {
+    const order = orders.find((order) => order.id === id);
+    return order ? order.order_number : "Unknown Order Number";
+  };
+  const getOrdersTotal = (id) => {
+    const order = orders.find((order) => order.id === id);
+    return order ? order.total_amount : "Unknown Order Number";
   };
 
-  const getUsersName = (id) => {
-    const user = users.find((user) => user.id === id);
-    return user ? user.name : "Unknown User";
-  };
-
-  const toggleOpenDropdown = (id) => {
-    setOpenDropdownId(openDropdownId === id ? null : id);
-  };
+  // const toggleOpenDropdown = (id) => {
+  //   setOpenDropdownId(openDropdownId === id ? null : id);
+  // };
 
   return (
     <>
@@ -41,27 +50,59 @@ export default function AdminPayments() {
         <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
           {/* Search Header */}
           <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-            <div className="w-full md:w-1/2">
-              <form className="flex items-center">
-                <label htmlFor="simple-search" className="sr-only">
-                  Search
-                </label>
-                <div className="relative w-full">
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
-                    </svg>
+              <div className="w-full md:w-1/2">
+                <form className="flex items-center">
+                  <label htmlFor="simple-search" className="sr-only">
+                    Search
+                  </label>
+                  <div className="relative w-full">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <svg
+                        aria-hidden="true"
+                        className="w-5 h-5 text-gray-500 dark:text-gray-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <input
+                      type="text"
+                      id="simple-search"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+                      placeholder="Search"
+                      required=""
+                    />
                   </div>
-                  <input
-                    type="text"
-                    id="simple-search"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                    placeholder="Search"
-                  />
-                </div>
-              </form>
+                </form>
+              </div>
+              <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+                <Link
+                  to={'/admin/payments/create'}
+                  className="flex items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800"
+                >
+                  <svg
+                    className="h-3.5 w-3.5 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <path
+                      clipRule="evenodd"
+                      fillRule="evenodd"
+                      d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                    />
+                  </svg>
+                  Add Payments
+                </Link>
+              </div>
             </div>
-          </div>
 
           {/* Table */}
           <div className="overflow-x-auto">
@@ -70,14 +111,14 @@ export default function AdminPayments() {
                 <tr>
                   <th className="px-4 py-3">Id</th>
                   <th className="px-4 py-3">Order Id</th>
-                  <th className="px-4 py-3">User Id</th>
+                  <th className="px-4 py-3">Customer Name</th>
                   <th className="px-4 py-3">Kode Pembayaran</th>
                   <th className="px-4 py-3">Payment Method</th>
                   <th className="px-4 py-3">Total Amount</th>
                   <th className="px-4 py-3">Amount Paid</th>
                   <th className="px-4 py-3">Change Amount</th>
                   <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Action</th>
+                  <th className="px-4 py-3 text-center">Action</th>
                 </tr>
               </thead>
 
@@ -87,16 +128,16 @@ export default function AdminPayments() {
                     <tr key={payment.id} className="border-b dark:border-gray-700">
                       <td className="px-4 py-3">{payment.id}</td>
                       <td className="px-4 py-3">{payment.order_id}</td>
-                      <td className="px-4 py-3">{getUsersName(payment.user_id)}</td> {/*Menampilkan nama user berdasarkan user_id*/}
-                      <td className="px-4 py-3">{payment.kode_pembayaran}</td>
+                      <td className="px-4 py-3">{getOrdersName(payment.order_id)}</td> {/*Menampilkan nama user berdasarkan user_id*/}
+                      <td className="px-4 py-3">{getOrdersNumber(payment.order_id)}</td>
                       <td className="px-4 py-3">{payment.payment_method}</td>
-                      <td className="px-4 py-3">{payment.total_amount}</td>
+                      <td className="px-4 py-3">{getOrdersTotal(payment.order_id)}</td>
                       <td className="px-4 py-3">{payment.amount_paid}</td>
                       <td className="px-4 py-3">{payment.change_amount}</td>
                       <td className="px-4 py-3">{payment.status}</td>
 
                       {/* Action Dropdown */}
-                      <td className="px-4 py-3 text-right relative">
+                      <td className="px-4 py-3 text-center relative">
                         <button
                           onClick={() => setOpenDropdownId(openDropdownId === payment.id ? null : payment.id)}
                           className="inline-flex items-center p-0.5 text-sm font-medium text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-100"
@@ -110,7 +151,7 @@ export default function AdminPayments() {
                           <div className="absolute right-0 mt-2 z-10 w-44 bg-white rounded-lg shadow dark:bg-gray-700">
                             <ul className="py-1 text-sm text-gray-700 dark:text-gray-200">
                               <li>
-                                <Link to={`/admin/payments/edit/${payment.id}`} className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                <Link to={`/admin/payments/edit/${payment.id}`} className="text-left block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                   Edit
                                 </Link>
                               </li>

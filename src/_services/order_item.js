@@ -1,13 +1,13 @@
 import { API } from "../_api/index"
 
-export const getUsers= async () => {
-      const {data} = await API.get("/users");
+export const getOrder_item = async () => {
+      const {data} = await API.get("/orders");
       return data.data
 }
 
-export const createusers = async (data) => {
+export const createOrder_item = async (data) => {
       try {
-            const response = await API.post("/users", data)
+            const response = await API.post("/orders", data)
             return response.data
       } catch (error){
             console.log(error);
@@ -15,9 +15,9 @@ export const createusers = async (data) => {
       }
 }
 
-export const showusers = async (id) => {
+export const showOrders = async (id) => {
       try {
-            const { data } = await API.get(`/users/${id}`)
+            const { data } = await API.get(`/orders/${id}`)
             return data.data
       } catch (error) {
             console.log(error)
@@ -25,9 +25,9 @@ export const showusers = async (id) => {
       }
 }
 
-export const updateusers = async (id, data) => {
+export const updateOrders = async (id, data) => {
       try {
-            const response = await API.put(`/users/${id}?_method=PUT`, data, {
+            const response = await API.put(`/orders/${id}?_method=PUT`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -39,9 +39,9 @@ export const updateusers = async (id, data) => {
       }
 }     
 
-export const deleteUsers = async (id) => {
+export const deleteOrders = async (id) => {
       try {
-            await API.delete(`/users/${id}`)
+            await API.delete(`/orders/${id}`)
       } catch(error){
             console.log(error)
             throw error

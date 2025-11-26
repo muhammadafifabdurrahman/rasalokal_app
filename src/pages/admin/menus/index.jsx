@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getMenus} from "../../../_services/menus";
+import { deleteMenus, getMenus} from "../../../_services/menus";
 import { getCategories } from "../../../_services/categories";
 
 export default function AdminMenus() {
@@ -30,13 +30,13 @@ export default function AdminMenus() {
         setOpenDropdownId(openDropdownId === id ? null : id)
     }
 
-    // const handleDelete = async (id) => {
-    //     const confirmDelete = window.confirm("Are you sure to delete this book?");
-    //     if(confirmDelete){
-    //         await deleteBook(id);
-    //         setBooks(books.filter((book) => book.id !== id));
-    //     }
-    // }
+    const handleDelete = async (id) => {
+        const confirmDelete = window.confirm("Are you sure to delete this Menu?");
+        if(confirmDelete){
+            await deleteMenus(id);
+            setMenus(menus.filter((menu) => menu.id !== id));
+        }
+    }
 
     return (
     <>
@@ -76,7 +76,7 @@ export default function AdminMenus() {
               </div>
               <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                 <Link
-                  to={'/admin/authors/create'}
+                  to={'/admin/menus/create'}
                   className="flex items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800"
                 >
                   <svg
@@ -180,7 +180,7 @@ export default function AdminMenus() {
                           </li>
                         </ul>
                         <div className="py-1">
-                            <button  className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</button>
+                            <button onClick={ ()=> handleDelete(menu.id)} className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</button>
                         </div>
                       </div>
                     )}

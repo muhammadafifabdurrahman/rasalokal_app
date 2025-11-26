@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getCategories } from "../../../_services/categories";
+import { deleteCategories, getCategories } from "../../../_services/categories";
 
 export default function AdminCategories() {
 
@@ -18,6 +18,14 @@ export default function AdminCategories() {
 
     const toggleOpenDropdown = (id) => {
         setOpenDropdownId(openDropdownId === id ? null : id)
+    }
+
+    const handleDelete = async (id) => {
+        const confirmDelete = window.confirm("Are you sure to delete this category?");
+        if(confirmDelete){
+            await deleteCategories(id);
+            setCategories(categories.filter((categori) => categori.id !== id));
+        }
     }
 
     return (
@@ -151,7 +159,7 @@ export default function AdminCategories() {
                           </li>
                         </ul>
                         <div className="py-1">
-                            <button  className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</button>
+                            <button onClick={ ()=> handleDelete(categori.id)}  className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</button>
                         </div>
                       </div>
                     )}
