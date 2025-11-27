@@ -6,12 +6,13 @@ import { createMenu } from "../../../_services/menus";
 export default function OrdersCreate() {
     const [categories, setCategories] = useState([]);
     const [formData, setFormData] = useState({
-        name: '',
-        description: '',
-        price: 0,
-        stock: 0,
-        photo: "",
-        category_id: 0,
+        customer_name: 0,
+        customer_phone: 0,
+        table_number: 0,
+        order_type: 0,
+        total_amount: "",
+        status: 0,
+        payment_status: 0
     });
 
     const navigate = useNavigate();
@@ -51,12 +52,12 @@ export default function OrdersCreate() {
                 payload.append(key, formData[key]);
             }
 
-            await createMenu(payload);
-            navigate("/admin/menus")
-            alert('Menu berhasil ditambahkan')
+            await createOrders(payload);
+            navigate("/admin/orders")
+            alert('Orders berhasil ditambahkan')
         } catch (error){ 
             console.log(error);
-            alert("Error creating menu")
+            alert("Error creating orders")
         }
     }
     console.log(formData)

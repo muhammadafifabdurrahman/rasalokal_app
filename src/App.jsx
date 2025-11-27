@@ -10,6 +10,7 @@ import CategoriesCreate from './pages/admin/categories/create';
 import AdminOrders from './pages/admin/orders';
 import MenusCreate from './pages/admin/menus/create';
 import PaymentCreate from './pages/admin/payments/create';
+import AdminOrdersItems from './pages/admin/order_items';
 
 
 function App() {
@@ -32,6 +33,9 @@ function App() {
             </Route>
             <Route path='orders'>
               <Route index element={<AdminOrders />}/>
+            </Route>
+            <Route path='order_items'>
+              <Route index element={<AdminOrdersItems />}/>
             </Route>
             <Route path='payments'>
               <Route index element={<AdminPayments />}/>

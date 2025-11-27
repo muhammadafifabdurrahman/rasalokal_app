@@ -1,0 +1,237 @@
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { showOrdersItems, updateOrdersItems } from "../../../_services/order_items";
+
+export default function orderItemsEdit(){
+    const { id } = useParams();
+    const navigate = useNavigate()
+    const [menus, setMenus] = useState([]);
+
+    const [formData, setFormData] = useState({
+        menu_id: 0,
+        quantity: 0,
+        _method: 'PUT'
+    });
+
+     useEffect(()=> {
+        const fetchData = async () => {
+            const [menusData, orderItemData] = await Promise.all([
+                getMenus(menusData),
+                showOrdersItems(id)
+            ]);
+            setGenres(genresData);
+            setAuthors(authorsData);
+            setFormData({
+                title: bookData.title,
+                price: bookData.price,
+                stock: bookData.stock,
+                genre_id: bookData.genre_id,
+                author_id: bookData.author_id,
+                cover_photo: bookData.cover_photo,
+                description: bookData.description,
+                _method: 'PUT'
+            })
+        };
+        fetchData();
+    }, [id])
+
+
+    console.log(formData);
+    
+    const handleChange = (e) => {
+        const {name, value, files} = e.target;
+        if(name === "cover_photo"){
+            setFormData({
+                ...formData,
+                cover_photo: files[0],
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [name]: value,
+            });
+        }
+    }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+            try {
+                const payload = new FormData();
+                for(const key in formData){
+                    if(key === "cover_photo"){
+                        if(formData.cover_photo instanceof File) {
+                            payload.append("cover_photo", formData.cover_photo);
+                        }; 
+                    } else {
+                        payload.append(key, formData[key]);
+                    }
+                }
+
+                await updateBook(id, payload);
+                navigate("/admin/books")
+                alert('Buku berhasil diperbarui')
+            } catch (error){ 
+                console.log(error);
+                alert("Error update book")
+            }
+    }
+
+    return (
+        <>
+          <section className="w-full bg-white dark:bg-gray-900">
+            <div className="px-4 py-8 mx-auto lg:py-16">
+              <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+                Edit New Book
+              </h2>
+              <form onSubmit={handleSubmit}>
+                <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
+                  <div className="sm:col-span-2">
+                    <label
+                      for="title"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Title
+                    </label>
+                    <input
+                      type="text"
+                      name="title"
+                      id="title"
+                      value={formData.title}
+                      onChange={handleChange}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+                      placeholder="Book Title"
+                      required
+                    />
+                  </div>
+                  <div className="w-full">
+                    <label
+                      for="price"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Price
+                    </label>
+                    <input
+                      type="number"
+                      name="price"
+                      id="price"
+                      value={formData.price}
+                      onChange={handleChange}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+                      placeholder="e.g. 90000"
+                      required
+                    />
+                  </div>
+                  <div className="w-full">
+                    <label
+                      for="stock"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Stock
+                    </label>
+                    <input
+                      type="number"
+                      name="stock"
+                      id="stock"
+                      value={formData.stock}
+                      onChange={handleChange}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+                      placeholder="e.g. 20"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      for="genre_id"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Genre
+                    </label>
+                    <select
+                      id="genre_id"
+                      name="genre_id"
+                      value={formData.genre_id}
+                      onChange={handleChange}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+                    >
+                      <option value="">---Select Genre---</option>
+                      {genres.map((genre) => (
+                        <option key={genre.id} value={genre.id}>{genre.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      for="author_id"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Author
+                    </label>
+                    <select
+                      id="author_id"
+                      name="author_id"
+                      value={formData.author_id}
+                      onChange={handleChange}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+                    >
+                      <option value="">---Select Author---</option>
+                      {authors.map((author) => (
+                        <option key={author.id} value={author.id}>{author.name}</option>
+                      ))}
+                    </select>
+                  </div> 
+                  <div className="w-full">
+                    <label
+                      for="cover_photo"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Cover
+                    </label>
+                    <input
+                      type="file"
+                      name="cover_photo"
+                      id="cover_photo"
+                      accept="image/*"
+                      onChange={handleChange}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full cursor-pointer dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    />
+                  </div>
+                  
+                  <div className="sm:col-span-2">
+                    <label
+                      for="description"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Description
+                    </label>
+                    <textarea
+                      id="description"
+                      name="description"
+                      rows="8"
+                      value={formData.description}
+                      onChange={handleChange}
+                      className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+                      placeholder="Write a description of the book..."
+                    >
+                    </textarea>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <button
+                    type="submit"
+                    className="text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
+                  >
+                    Save Data
+                  </button>
+                  <button
+                    type="button"
+                    className="text-gray-600 inline-flex items-center hover:text-white border border-gray-600 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-gray-500 dark:text-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-900"
+                  >
+                    Reset
+                  </button>
+                </div>
+              </form>
+            </div>
+          </section>
+        </>
+      );
+}

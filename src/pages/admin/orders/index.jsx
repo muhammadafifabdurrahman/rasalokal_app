@@ -99,6 +99,9 @@ export default function AdminOrders() {
                       Order Type
                     </th>
                     <th scope="col" className="px-4 py-3">
+                      Menu Items
+                    </th>
+                    <th scope="col" className="px-4 py-3">
                       Total Amount
                     </th>
                     <th scope="col" className="px-4 py-3">
@@ -131,6 +134,20 @@ export default function AdminOrders() {
                     <td className="px-4 py-3">{order.customer_name}</td>
                     <td className="px-4 py-3">{order.table_number}</td>
                     <td className="px-4 py-3">{order.order_type}</td>
+                    {/* ITEMS */}
+                    <td className="px-4 py-3">
+                      {order.order_items?.length > 0 ? (
+                        <ul className="ml-4 list-disc">
+                          {order.order_items.map((item) => (
+                            <li key={item.id}>
+                              {item.menu.name} x {item.quantity} <span className="text-xs">(Rp{item.subtotal})</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <span className="italic text-gray-400">No items</span>
+                      )}
+                    </td>
                     <td className="px-4 py-3">{order.total_amount}</td>
                     <td className="px-4 py-3">{order.status}</td>
                     <td className="px-4 py-3">{order.note}</td>

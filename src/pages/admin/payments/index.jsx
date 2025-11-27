@@ -118,7 +118,7 @@ export default function AdminPayments() {
                   <th className="px-4 py-3">Amount Paid</th>
                   <th className="px-4 py-3">Change Amount</th>
                   <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3 text-center">Action</th>
+                  <th className="px-4 py-3 text-center">Action</th>             
                 </tr>
               </thead>
 

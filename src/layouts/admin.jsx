@@ -136,11 +136,11 @@ export default function AdminLayout() {
 
             <li>
               <Link
-                to="/admin/ordersItem"
+                to="/admin/order_items"
                 className="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <span className="ml-2 text-gray-900 dark:text-white">
-                  Order Item
+                  Order Items
                 </span>
               </Link>
             </li>

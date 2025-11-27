@@ -1,11 +1,11 @@
 import { API } from "../_api/index"
 
-export const getOrder_item = async () => {
-      const {data} = await API.get("/orders");
+export const getOrdersItems = async () => {
+      const {data} = await API.get("/order_items");
       return data.data
 }
 
-export const createOrder_item = async (data) => {
+export const createOrdersItems = async (data) => {
       try {
             const response = await API.post("/orders", data)
             return response.data
@@ -15,7 +15,7 @@ export const createOrder_item = async (data) => {
       }
 }
 
-export const showOrders = async (id) => {
+export const showOrdersItems = async (id) => {
       try {
             const { data } = await API.get(`/orders/${id}`)
             return data.data
@@ -25,7 +25,7 @@ export const showOrders = async (id) => {
       }
 }
 
-export const updateOrders = async (id, data) => {
+export const updateOrdersItems = async (id, data) => {
       try {
             const response = await API.put(`/orders/${id}?_method=PUT`, data, {
       headers: {
@@ -39,7 +39,7 @@ export const updateOrders = async (id, data) => {
       }
 }     
 
-export const deleteOrders = async (id) => {
+export const deleteOrdersItems = async (id) => {
       try {
             await API.delete(`/orders/${id}`)
       } catch(error){
